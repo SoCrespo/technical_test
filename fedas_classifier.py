@@ -86,10 +86,10 @@ class FedasClassifier:
         """
         Return a pd.DataFrame with predicted fedas codes and their confidence.
         """
-        print("Predicting fedas codes...")
         output = pd.DataFrame()
         features = self._normalize_features(X)
         features = self.vectorizer.transform(features)
+        print("Predicting fedas codes...")
         for i in range(features.shape[0]):
             fedas, confidence = self.predict_from_vector(features[i])
             output.loc[i, 'fedas'] = fedas
