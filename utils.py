@@ -2,7 +2,8 @@
 
 from typing import List
 import pandas as pd
-
+import string
+import re
 
 def split_fedas_code(x: str) -> List[int]:
     """
@@ -18,5 +19,18 @@ def split_fedas_code(x: str) -> List[int]:
     return [int(x[:1]), int(x[1:3]), int(x[3:5]), int(x[5:])]
 
 
-
-    
+def normalize(x, keep_digits=False):
+    """
+    Return x in lowercase and with only letters 
+    (punctuation or special characters).
+    If keep digits is True, digits are kept.
+    """
+    if not isinstance(x, str):
+        return ""
+    x = x.lower()
+    if keep_digits:
+        result = re.sub(r"[^a-z0-9 ]", " ", x)
+    else:
+        result = re.sub(r"[^a-z ]", " ", x)
+    return " ".join(result.split())
+        #return ''.join([c for c in x if c.isalpha() or c in string.whitespace])
