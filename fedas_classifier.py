@@ -1,4 +1,5 @@
 #encoding=utf8
+
 import utils
 import pandas as pd
 import numpy as np
@@ -10,7 +11,7 @@ import logging
 
 class FedasClassifier:
     """
-    Class to fit model and predict fedas codes from article characteristics.
+    Class to fit model and predict FEDAS codes from article characteristics.
     """
 
     def __init__(self, n_estimators=100, random_state=42):
@@ -23,6 +24,7 @@ class FedasClassifier:
                                                                        random_state=random_state))
         self.logger = logging.getLogger()
         self.logger.setLevel(logging.INFO)
+
 
     def _normalize_features(self, features: pd.DataFrame) -> pd.Series:
         """
@@ -55,9 +57,10 @@ class FedasClassifier:
         return output
 
 
-    def fit(self, X:pd.DataFrame, y:pd.Series)->None:
+    def fit(self, X:pd.DataFrame, y:pd.Series)-> None:
         """
-        Fit the model on the given data.
+        Fit the model on the given data. X is a pd.DataFrame with features
+        and y is a pd.Series with target fedas codes.
         """
         X = self._normalize_features(X)
         X = self.vectorizer.fit_transform(X)
@@ -69,7 +72,8 @@ class FedasClassifier:
     
     def predict_from_vector(self, vector: np.ndarray) -> tuple:
         """
-        Return tuple (fedas code (str), fedas code accuracy (float)) for given vector.
+        Return tuple (fedas code (str), fedas code accuracy (float))
+        for given vector.
         """
         fedas = ""
         confidence = 1
@@ -82,9 +86,11 @@ class FedasClassifier:
             confidence *= proba
         return (fedas, confidence)
 
+
     def predict(self, X):
         """
-        Return a pd.DataFrame with predicted fedas codes and their confidence.
+        Return a pd.DataFrame with predicted fedas codes
+        and their confidence scores (from 0 to 1).
         """
         output = pd.DataFrame()
         features = self._normalize_features(X)
