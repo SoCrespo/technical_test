@@ -1,9 +1,7 @@
 # encoding: utf-8
 
-from typing import List
-import pandas as pd
-import string
 import re
+from typing import List
 
 def split_fedas_code(x: str) -> List[int]:
     """
@@ -33,4 +31,3 @@ def normalize(x, keep_digits=False):
     else:
         result = re.sub(r"[^a-z ]", " ", x)
     return " ".join(result.split())
-        #return ''.join([c for c in x if c.isalpha() or c in string.whitespace])
