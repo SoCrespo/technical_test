@@ -27,7 +27,7 @@ def normalize(x, keep_digits=False):
         return ""
     x = x.lower()
     if keep_digits:
-        result = re.sub(r"[^a-z0-9 ]", " ", x)
+        result = re.sub(r"[^a-z0-9 _]", " ", x)
     else:
-        result = re.sub(r"[^a-z ]", " ", x)
+        result = re.sub(r"[^a-z _]", " ", x)
     return " ".join(result.split())
