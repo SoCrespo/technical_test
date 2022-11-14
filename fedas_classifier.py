@@ -1,12 +1,12 @@
 #encoding=utf8
-
-import utils
+import functools
+import logging
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.ensemble import RandomForestClassifier
-import logging
+import utils
 
 
 class FedasClassifier:
@@ -72,19 +72,22 @@ class FedasClassifier:
     
     def predict_from_vector(self, vector: np.ndarray) -> tuple:
         """
-        Return tuple (fedas code (str), fedas code accuracy (float))
+        Return tuple (fedas code (str), fedas code confidence (float))
         for given vector.
         """
-        fedas = ""
-        confidence = 1
-        for i, estimator in enumerate(self.classifier.estimators_):
-            fedas_part = str(estimator.predict(vector)[0])
+        codes = self.classifier.predict(vector)
+        codes = codes[0].astype(str).tolist()
+        fedas_code = ""
+        for i, code in enumerate(codes):
             if i in [1, 2]:
-                fedas_part = fedas_part.rjust(2, '0') # fedas_2 and fedas_3 have 2 digits
-            proba = estimator.predict_proba(vector).max()
-            fedas += str(fedas_part)
-            confidence *= proba
-        return (fedas, confidence)
+                code = code.rjust(2, '0') # fedas_2 and fedas_3 have 2 digits
+            fedas_code += code
+
+        probas = self.classifier.predict_proba(vector)
+        max_probas = [max(proba[0]) for proba in probas]
+        confidence = functools.reduce(lambda x, y: x*y, max_probas)
+
+        return (fedas_code, confidence)
 
 
     def predict(self, X):
