@@ -1,4 +1,4 @@
-## Important notice
+## Please notice
 
 This repository is intented to be a basis for discussion in the context of a techical test. This is not a complete solution ready to deploy but a baseline approach. 
 
